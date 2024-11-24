@@ -35,9 +35,6 @@ RUN wget ${CMAKE_URL} -q -O /tmp/cmake-install.sh \
 # Создаем ссылку для python
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-# Устанавливаем git-lfs
-RUN git lfs install
-
 # Установка зависимостей
 # libgl1-mesa-glx \  # Для поддержки OpenGL (необходимо для некоторых функций OpenCV)
 # libglib2.0-0 \     # Для работы с изображениями
@@ -47,15 +44,11 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Установка OpenCV через pip
-RUN pip install opencv-python>=4.4.0.46
+RUN pip install opencv-python>=4.10.0.84
 
 # Устанавливаем Python пакеты
 ARG pytorch_url=https://download.pytorch.org/whl/${PYTORCH_CUDA_REPO}
 RUN pip install --no-cache-dir torch==2.1.2 torchvision==0.16.2 --index-url ${pytorch_url}
-
-RUN pip install --no-cache-dir transformers==4.33.0 accelerate==1.1.1
-
-RUN pip install --no-cache-dir --no-build-isolation flash-attn==2.6.1
 
 # Устанавливаем рабочую директорию
 WORKDIR /workspace
@@ -64,9 +57,12 @@ WORKDIR /workspace
 # COPY ./vlmevalkit/* /workspace/vlmevalkit
 COPY shared_folder/vlmevalkit/requirements.txt /workspace/requirements.txt
 
-# Устанавливаем зависимости проекта (если они указаны в requirements.txt)
+# Устанавливаем зависимости проекта из requirements.txt
 RUN pip install --no-cache-dir -r /workspace/requirements.txt
 RUN rm /workspace/requirements.txt
+
+# Собираем flash-attn
+RUN pip install --no-cache-dir --no-build-isolation flash-attn==2.6.1
 
 # Запускаем терминал
 CMD ["/bin/bash"]
