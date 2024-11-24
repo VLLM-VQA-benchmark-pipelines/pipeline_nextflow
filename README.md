@@ -24,9 +24,3 @@ docker run \
 ```
 
 Нам откроется терминал внутри `Docker Container`.
-
-Для запуска предсказаний выполним в нем команду:
-```
-cd cd workspace
-python run_predict.py
-```
