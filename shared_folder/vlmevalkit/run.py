@@ -57,16 +57,42 @@ def set_my_args():
     # Essential Args
     parser.add_argument("--data", type=str, nargs="+", required=True)
     parser.add_argument("--model", type=str, nargs="+", required=True)
+    # Args that only apply to Video Dataset
+    parser.add_argument("--nframe", type=int, default=8)
+    parser.add_argument("--pack", action="store_true")
+    parser.add_argument("--use-subtitle", action="store_true")
+    parser.add_argument("--fps", type=float, default=-1)
+    # Work Dir
+    parser.add_argument(
+        "--work-dir", type=str, default="./outputs", help="select the output directory"
+    )
+    # Infer + Eval or Infer Only
+    parser.add_argument("--mode", type=str, default="all", choices=["all", "infer"])
+    # API Kwargs, Apply to API VLMs and Judge API LLMs
+    parser.add_argument("--nproc", type=int, default=4, help="Parallel API calling")
+    parser.add_argument(
+        "--retry", type=int, default=None, help="retry numbers for API VLMs"
+    )
+    # Explicitly Set the Judge Model
+    parser.add_argument("--judge", type=str, default=None)
+    # Logging Utils
+    parser.add_argument("--verbose", action="store_true")
+    # Configuration for Resume
+    # Ignore: will not rerun failed VLM inference
+    parser.add_argument("--ignore", action="store_true", help="Ignore failed indices. ")
+    # Reuse: will reuse the existing prediction files
+    parser.add_argument("--reuse", action="store_true")
 
     # Симуляция передачи аргументов через командную строку
+    # тоже интересные датасеты:
+    # "ChartQA_TEST",
+    # "LLaVABench",
     args = parser.parse_known_args(
         [
             "--data",
             "MTVQA_TEST",
-            "ChartQA_TEST",
-            "LLaVABench",
             "--model",
-            "llava_onevision_qwen2_7b_si",
+            "Qwen2-VL-2B-Instruct",
         ]
     )[0]
 
