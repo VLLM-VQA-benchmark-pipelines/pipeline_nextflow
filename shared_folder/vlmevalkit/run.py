@@ -40,12 +40,30 @@ def parse_args():
     args = parser.parse_args()
     return args
 
+def set_my_args():
+    """Функция для симуляции передачи аргументов из командной строки.
+
+    Returns
+    -------
+    argparse.ArgumentParser().parse_args()
+        аргументы, которые мы указали внутри python-скрипта
+    """    
+    parser = argparse.ArgumentParser()
+    # Essential Args
+    parser.add_argument('--data', type=str, nargs='+', required=True)
+    parser.add_argument('--model', type=str, nargs='+', required=True)
+    
+    # Симуляция передачи аргументов через командную строку
+    args = parser.parse_known_args(['--data', 'LLaVABench', '--model', 'llava_onevision_qwen2_7b_si'])[0]
+    
+    return args
 
 def main():
     logger = get_logger('RUN')
     rank, world_size = get_rank_and_world_size()
 
-    args = parse_args()
+    # args = parse_args()
+    args = set_my_args()
 
     assert len(args.data), '--data should be a list of data files'
 

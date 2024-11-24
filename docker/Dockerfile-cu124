@@ -1,7 +1,7 @@
 # Образы для контейнера
-FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu20.04
+FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
 ARG CMAKE_VERSION=3.26.1
-ARG PYTORCH_CUDA_REPO=cu124
+ARG PYTORCH_CUDA_REPO=cu121
 
 # Отключаем интерактивные вопросы при установке пакетов
 ARG DEBIAN_FRONTEND=noninteractive
@@ -38,26 +38,35 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 # Устанавливаем git-lfs
 RUN git lfs install
 
+# Установка зависимостей
+# libgl1-mesa-glx \  # Для поддержки OpenGL (необходимо для некоторых функций OpenCV)
+# libglib2.0-0 \     # Для работы с изображениями
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Установка OpenCV через pip
+RUN pip install opencv-python>=4.4.0.46
+
 # Устанавливаем Python пакеты
 ARG pytorch_url=https://download.pytorch.org/whl/${PYTORCH_CUDA_REPO}
-RUN pip3 install --no-cache-dir networkx==3.1
-RUN pip3 install --no-cache-dir torch==2.4.0 torchvision==0.19 --index-url ${pytorch_url}
+RUN pip install --no-cache-dir torch==2.1.2 torchvision==0.16.2 --index-url ${pytorch_url}
 
-RUN pip3 install --no-cache-dir transformers==4.46.1 \
-    accelerate==1.0.1 \
-    qwen-vl-utils==0.0.8
+RUN pip install --no-cache-dir transformers==4.33.0 accelerate==1.1.1
 
-RUN pip3 install --no-cache-dir --no-build-isolation flash-attn==2.6.1
+RUN pip install --no-cache-dir --no-build-isolation flash-attn==2.6.1
 
 # Устанавливаем рабочую директорию
 WORKDIR /workspace
 
 # Копируем все файлы из текущей директории в рабочую директорию контейнера
 # COPY ./vlmevalkit/* /workspace/vlmevalkit
-COPY ./shared_folder/vlmevalkit/requirements.txt /workspace/requirements.txt
+COPY shared_folder/vlmevalkit/requirements.txt /workspace/requirements.txt
 
 # Устанавливаем зависимости проекта (если они указаны в requirements.txt)
-RUN pip3 install --no-cache-dir -r ./requirements.txt
+RUN pip install --no-cache-dir -r /workspace/requirements.txt
+RUN rm /workspace/requirements.txt
 
 # Запускаем терминал
 CMD ["/bin/bash"]
