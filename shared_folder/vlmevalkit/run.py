@@ -56,7 +56,6 @@ def set_my_args():
     # Симуляция передачи аргументов через командную строку
     args = parser.parse_known_args(['--data', 'LLaVABench', '--model', 'llava_onevision_qwen2_7b_si'])[0]
     
-    args = parser.parse_args()
     return args
 
 def main():
