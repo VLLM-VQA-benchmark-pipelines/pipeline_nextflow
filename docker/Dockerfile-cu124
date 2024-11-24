@@ -38,6 +38,17 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 # Устанавливаем git-lfs
 RUN git lfs install
 
+# Установка зависимостей
+# libgl1-mesa-glx \  # Для поддержки OpenGL (необходимо для некоторых функций OpenCV)
+# libglib2.0-0 \     # Для работы с изображениями
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Установка OpenCV через pip
+RUN pip install opencv-python>=4.4.0.46
+
 # Устанавливаем Python пакеты
 ARG pytorch_url=https://download.pytorch.org/whl/${PYTORCH_CUDA_REPO}
 RUN pip3 install --no-cache-dir networkx==3.1
