@@ -1,0 +1,10 @@
+read step 1
+read step 2
+read step 3
+read step 4
+read step 5
+read step 6
+read step 7
+read step 8
+read step 9
+read step 10
