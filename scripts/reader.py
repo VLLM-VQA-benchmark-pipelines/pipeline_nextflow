@@ -1,8 +1,8 @@
 
 def read_steps():
     # Пути к файлам
-    file_path_writer = 'Data/task1.txt'
-    file_path_reader = 'Data/task2.txt'
+    file_path_writer = '/Data/task1.txt'
+    file_path_reader = '/Data/task2.txt'
 
     # Чтение из файла
     with open(file_path_writer, 'r') as input_file:
@@ -15,6 +15,6 @@ def read_steps():
 
     print(f"Файл '{file_path_reader}' успешно создан и записан.")
 
+
 if __name__ == "__main__":
     read_steps()
-    

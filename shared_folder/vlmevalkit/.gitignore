@@ -1,3 +1,7 @@
+# Nextflow
+../../pipeline/.nextflow.log*
+../../pipeline/work
+
 .idea/
 
 # Byte-compiled / optimized / DLL files
