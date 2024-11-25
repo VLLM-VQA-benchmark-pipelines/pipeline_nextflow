@@ -1,26 +1,16 @@
 # Описание
 
-Используем фреймворк `VLMEvalKit` ([ссылка](https://github.com/open-compass/VLMEvalKit)) для бенчмаркинга VLM моделей на популярных датсетах .
+Заготовка пайплайна с использованием фреймворка Nextflow.
 
-# Docker контейнер
+# Создание `conda` окружения для `nextflow`
 
-## Build Docker image
-
-Для сборки `Docker image` выполним команду:
 ```
-docker build -t vlmevalkit:v0.2rc1-cu124 -f docker/Dockerfile-cu124 .
+conda env create -n nextflow -c bioconda -c conda-forge nextflow
+conda activate nextflow
 ```
 
-## Run Docker Container
+# Запуск пайплайна из папки `./pipeline`
 
-Для запуска `Docker Container` выполним команду:
 ```
-docker run \
-    --gpus all \
-    --rm \
-    -it \
-    -v ./shared_folder:/workspace \
-    vlmevalkit:v0.2rc1-cu124
+nextflow run main.nf
 ```
-
-Нам откроется терминал внутри `Docker Container`.
