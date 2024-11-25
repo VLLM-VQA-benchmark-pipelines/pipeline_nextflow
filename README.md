@@ -9,7 +9,7 @@ conda env create -n nextflow -c bioconda -c conda-forge nextflow
 conda activate nextflow
 ```
 
-### Запуск пайплайна из папки `./pipeline`
+### Запуск пайплайна из папки `pipeline/`
 
 ```
 nextflow run main.nf
